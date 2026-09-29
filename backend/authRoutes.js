@@ -208,9 +208,10 @@ router.post("/forgot-password", async (req, res) => {
 
     try {
 
+        console.log("FORGOT PASSWORD API HIT ✅");
+        console.log("REQUEST BODY:", req.body);
+
         const { email } = req.body;
-
-
         if (!email) {
 
             return res.status(400).json({

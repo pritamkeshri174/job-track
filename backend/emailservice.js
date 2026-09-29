@@ -197,3 +197,10 @@ module.exports = {
     sendWelcomeEmail,
     sendResetPasswordEmail
 };
+transporter.verify((error, success) => {
+    if (error) {
+        console.error("GMAIL CONNECTION ERROR:", error);
+    } else {
+        console.log("Gmail SMTP is ready ✅");
+    }
+});
