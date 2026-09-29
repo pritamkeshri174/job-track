@@ -1334,3 +1334,40 @@ td:first-child {
         grid-template-columns: 1fr;
     }
 }
+/* ================================
+   PASSWORD SHOW / HIDE
+   ================================ */
+
+.password-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.password-wrapper input {
+    width: 100%;
+    box-sizing: border-box;
+    padding-right: 70px;
+}
+
+.toggle-password {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+
+    border: none;
+    background: transparent;
+
+    color: #2563eb;
+    font-size: 14px;
+    font-weight: 600;
+
+    cursor: pointer;
+    padding: 5px 6px;
+
+    z-index: 2;
+}
+
+.toggle-password:hover {
+    color: #1d4ed8;
+}
