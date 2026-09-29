@@ -1,6 +1,20 @@
-const { Resend } = require("resend");
+const nodemailer = require("nodemailer");
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+
+// ========================================
+// GMAIL TRANSPORTER
+// ========================================
+
+const transporter = nodemailer.createTransport({
+
+    service: "gmail",
+
+    auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS
+    }
+
+});
 
 
 // ========================================
@@ -9,43 +23,68 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 
 const sendWelcomeEmail = async (name, email) => {
 
-    const { data, error } = await resend.emails.send({
+    try {
 
-        from: "JobTrack <onboarding@resend.dev>",
+        await transporter.sendMail({
 
-        to: [email],
+            from: `"JobTrack" <${process.env.EMAIL_USER}>`,
 
-        subject: "Welcome to JobTrack 🎉",
+            to: email,
 
-        html: `
-            <h2>Welcome to JobTrack, ${name}! 🎉</h2>
+            subject: "Welcome to JobTrack 🎉",
 
-            <p>Your JobTrack account has been registered successfully.</p>
+            html: `
+                <div style="
+                    font-family: Arial, sans-serif;
+                    max-width: 600px;
+                    margin: auto;
+                    padding: 20px;
+                ">
 
-            <p>
-                You can now login and start tracking
-                your job applications.
-            </p>
+                    <h2>
+                        Welcome to JobTrack, ${name}! 🎉
+                    </h2>
 
-            <br>
+                    <p>
+                        Your JobTrack account has been
+                        registered successfully.
+                    </p>
 
-            <p>Thank you for joining JobTrack!</p>
+                    <p>
+                        You can now login and start
+                        tracking your job applications.
+                    </p>
 
-            <p>
-                <strong>— JobTrack Team</strong>
-            </p>
-        `
-    });
+                    <br>
 
+                    <p>
+                        Thank you for joining JobTrack!
+                    </p>
 
-    if (error) {
-        throw new Error(error.message);
+                    <p>
+                        <strong>— JobTrack Team</strong>
+                    </p>
+
+                </div>
+            `
+
+        });
+
+        console.log(
+            "Welcome email sent successfully to:",
+            email
+        );
+
+    } catch (error) {
+
+        console.error(
+            "Welcome Email Error:",
+            error.message
+        );
+
+        throw error;
     }
 
-    console.log(
-        "Welcome email sent successfully:",
-        data.id
-    );
 };
 
 
@@ -53,84 +92,105 @@ const sendWelcomeEmail = async (name, email) => {
 // SEND PASSWORD RESET EMAIL
 // ========================================
 
-const sendResetPasswordEmail = async (email, resetLink) => {
+const sendResetPasswordEmail = async (
+    email,
+    resetLink
+) => {
 
-    const { data, error } = await resend.emails.send({
+    try {
 
-        from: "JobTrack <onboarding@resend.dev>",
+        await transporter.sendMail({
 
-        to: [email],
+            from: `"JobTrack" <${process.env.EMAIL_USER}>`,
 
-        subject: "Reset Your JobTrack Password 🔐",
+            to: email,
 
-        html: `
-            <div style="font-family: Arial, sans-serif;">
+            subject: "Reset Your JobTrack Password 🔐",
 
-                <h2>Password Reset Request 🔐</h2>
+            html: `
+                <div style="
+                    font-family: Arial, sans-serif;
+                    max-width: 600px;
+                    margin: auto;
+                    padding: 20px;
+                    border: 1px solid #ddd;
+                    border-radius: 10px;
+                ">
 
-                <p>
-                    We received a request to reset your
-                    JobTrack account password.
-                </p>
+                    <h2>
+                        Password Reset Request 🔐
+                    </h2>
 
-                <p>
-                    Click the button below to create a
-                    new password:
-                </p>
+                    <p>
+                        We received a request to reset
+                        your JobTrack account password.
+                    </p>
 
-                <br>
+                    <p>
+                        Click the button below to
+                        create a new password:
+                    </p>
 
-                <a
-                    href="${resetLink}"
-                    style="
-                        display: inline-block;
-                        padding: 12px 24px;
-                        background-color: #2563eb;
-                        color: white;
-                        text-decoration: none;
-                        border-radius: 6px;
-                        font-weight: bold;
-                    "
-                >
-                    Reset Password
-                </a>
+                    <br>
 
-                <br><br>
+                    <a
+                        href="${resetLink}"
+                        style="
+                            display: inline-block;
+                            padding: 12px 24px;
+                            background: #2563eb;
+                            color: white;
+                            text-decoration: none;
+                            border-radius: 6px;
+                            font-weight: bold;
+                        "
+                    >
+                        Reset Password
+                    </a>
 
-                <p>
-                    This password reset link will expire
-                    in 15 minutes.
-                </p>
+                    <br><br>
 
-                <p>
-                    If you did not request a password reset,
-                    you can safely ignore this email.
-                </p>
+                    <p>
+                        This password reset link will
+                        expire in 15 minutes.
+                    </p>
 
-                <br>
+                    <p>
+                        If you did not request a password
+                        reset, you can safely ignore this email.
+                    </p>
 
-                <p>
-                    <strong>— JobTrack Team</strong>
-                </p>
+                    <br>
 
-            </div>
-        `
-    });
+                    <p>
+                        <strong>— JobTrack Team</strong>
+                    </p>
 
+                </div>
+            `
 
-    if (error) {
-        throw new Error(error.message);
+        });
+
+        console.log(
+            "Password reset email sent successfully to:",
+            email
+        );
+
+    } catch (error) {
+
+        console.error(
+            "Password Reset Email Error:",
+            error.message
+        );
+
+        throw error;
     }
 
-    console.log(
-        "Password reset email sent successfully:",
-        data.id
-    );
 };
 
 
 // ========================================
-// EXPORT BOTH FUNCTIONS
+// EXPORT
 // ========================================
 
 module.exports = {
