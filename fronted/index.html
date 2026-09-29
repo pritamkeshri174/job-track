@@ -179,7 +179,7 @@
     async function loadStats() {
         try {
             const response = await fetch(
-                "http://localhost:5000/api/jobs/public-stats"
+                "https://job-track-lpy1.onrender.com/api/jobs/public-stats"
             );
 
             const data = await response.json();
@@ -217,7 +217,7 @@
     async function loadUserCount() {
         try {
             const response = await fetch(
-                "http://localhost:5000/api/auth/count"
+                "https://job-track-lpy1.onrender.com/api/auth/count"
             );
 
             const data = await response.json();
